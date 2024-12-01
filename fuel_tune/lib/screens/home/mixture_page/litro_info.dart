@@ -82,7 +82,7 @@ class _LitroInfoState extends State<LitroInfo> {
             onEditingComplete: () {
               double litros = double.tryParse(litroController.text) ?? 0.0;
 
-              var resultado = CalculoCombustivel.calcularProporcao(
+              var resultado = CalculoCombustivelLitragem.calcularProporcao(
                   litros, selectedCombustivel!);
 
               setState(() {
