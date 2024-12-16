@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_tune/models/tipo_combustivel.dart';
 import 'package:fuel_tune/services/calculo_combustivel.dart';
+import 'package:fuel_tune/widgets/input_field_widget.dart';
 
 class ValorInfo extends StatefulWidget {
   @override
@@ -10,6 +11,8 @@ class ValorInfo extends StatefulWidget {
 class _ValorInfoState extends State<ValorInfo> {
   String? selectedCombustivel;
   TextEditingController litroController = TextEditingController();
+  TextEditingController precoGasolinaController = TextEditingController();
+  TextEditingController precoAlcoolController = TextEditingController();
   double alcool = 0.0;
   double gasolina = 0.0;
 
@@ -24,7 +27,7 @@ class _ValorInfoState extends State<ValorInfo> {
     return Column(
       children: [
         const Padding(
-          padding: EdgeInsets.only(top:20, bottom: 20),
+          padding: EdgeInsets.only(top: 20, bottom: 20),
           child: Text(
             'Selecione o Tipo de Combustível',
             style: TextStyle(fontSize: 18),
@@ -48,51 +51,35 @@ class _ValorInfoState extends State<ValorInfo> {
           ),
         ),
         const SizedBox(height: 20),
-        const Text(
-          'Quanto em R\$ você vai abastecer?',
-          style: TextStyle(fontSize: 18),
+        InputFieldWidget(
+          controller: litroController,
+          labelText: 'Quanto em R\$ você vai abastecer?',
+          hintText: 'Ex: 50',
         ),
-        Padding(
-          padding: const EdgeInsets.only(top:10, left: 10, right: 10),
-          child: TextField(
-            controller: litroController,
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              hintText: 'Ex: 10',
-              labelText: 'R\$',
-              hintStyle: const TextStyle(color: Colors.grey),
-              labelStyle: const TextStyle(color: Colors.black),
-              filled: true,
-              fillColor: Colors.white,
-              contentPadding:
-              const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Colors.grey, width: 1),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: const BorderSide(color: Colors.blue, width: 2),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: Colors.grey.shade300, width: 1),
-              ),
-            ),
-            onEditingComplete: () {
-              double litros = double.tryParse(litroController.text) ?? 0.0;
-
-              var resultado = CalculoCombustivelValor.calcularProporcao(
-                  litros, selectedCombustivel!);
-
-              setState(() {
-                alcool = resultado['alcool']!;
-                gasolina = resultado['gasolina']!;
-              });
-            },
+        const SizedBox(height: 20),
+        InputFieldWidget(
+          controller: precoGasolinaController,
+          labelText: 'Preço da Gasolina (R\$)',
+          hintText: 'Ex: 5.79',
+        ),
+        const SizedBox(height: 20),
+        InputFieldWidget(
+          controller: precoAlcoolController,
+          labelText: 'Preço do Álcool (R\$)',
+          hintText: 'Ex: 4.29',
+        ),
+        const SizedBox(height: 20),
+        ElevatedButton(
+          onPressed: _calcular,
+          style: ElevatedButton.styleFrom(
+            side: const BorderSide(color: Colors.blue, width: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            textStyle: const TextStyle(fontSize: 20),
+            foregroundColor: Colors.black,
           ),
+          child: const Text('Calcular'),
         ),
-        const SizedBox(height: 50),
+        const SizedBox(height: 10),
         Column(
           children: [
             const Text(
@@ -104,7 +91,6 @@ class _ValorInfoState extends State<ValorInfo> {
                 const TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
           ],
         ),
-        const SizedBox(height: 40),
         const Text(
           'Gasolina:',
           style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
@@ -115,5 +101,31 @@ class _ValorInfoState extends State<ValorInfo> {
         ),
       ],
     );
+  }
+
+  void _calcular() {
+    double litros = double.tryParse(litroController.text) ?? 0.0;
+    double precoGasolina = double.tryParse(precoGasolinaController.text) ?? 0.0;
+    double precoAlcool = double.tryParse(precoAlcoolController.text) ?? 0.0;
+
+    if (litros > 0 && precoGasolina > 0 && precoAlcool > 0) {
+      var resultado = CalculoCombustivelValor.calcularProporcao(
+        litros,
+        precoGasolina,
+        precoAlcool,
+        selectedCombustivel!,
+      );
+
+      setState(() {
+        alcool = resultado['alcool']!;
+        gasolina = resultado['gasolina']!;
+      });
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Por favor, insira todos os valores corretamente.'),
+        ),
+      );
+    }
   }
 }
