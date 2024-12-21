@@ -39,6 +39,7 @@ class _AutonomyPageState extends State<AutonomyPage> {
     Map<String, dynamic> novoRegistro = {
       'km_percorrido': double.tryParse(kmController.text) ?? 0.0,
       'litros_abastecidos': double.tryParse(litrosController.text) ?? 0.0,
+      'media_consumo': mediaConsumo,
       'data_hora': DateTime.now().toIso8601String(),
     };
 

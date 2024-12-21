@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'home/mixture_page.dart';
 import 'home/autonomy_page.dart';
-import 'home/settings_page.dart';
+import 'home/save_page.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -14,13 +14,13 @@ class _HomeState extends State<Home> {
   final List<Widget> _pages = [
     MixturePage(),
     AutonomyPage(),
-    SettingsPage(),
+    SavePage(),
   ];
 
   final List<String> _pageTitles = [
     'Mistura',
     'Autonomia',
-    'Configurações',
+    'Save',
   ];
 
   void _onItemTapped(int index) {
@@ -48,7 +48,7 @@ class _HomeState extends State<Home> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                  MaterialPageRoute(builder: (context) => SavePage()),
                 );
               },
             ),
