@@ -14,7 +14,27 @@ class AutonomyPage extends StatefulWidget {
 class _AutonomyPageState extends State<AutonomyPage> {
   final TextEditingController kmController = TextEditingController();
   final TextEditingController litrosController = TextEditingController();
+  final FocusNode litrosFocusNode = FocusNode();  // FocusNode para o campo litros
   double mediaConsumo = 0.0;
+
+  @override
+  void initState() {
+    super.initState();
+    litrosFocusNode.addListener(_onLitrosFocusChange);  // Ouve as mudanças de foco
+  }
+
+  @override
+  void dispose() {
+    litrosFocusNode.removeListener(_onLitrosFocusChange);  // Remover o ouvinte
+    super.dispose();
+  }
+
+  void _onLitrosFocusChange() {
+    if (!litrosFocusNode.hasFocus) {
+      // Quando o campo "Litros Abastecidos" perde o foco, calcula a média
+      _calcularMedia();
+    }
+  }
 
   void _calcularMedia() {
     final double kmPercorridos = double.tryParse(kmController.text) ?? 0.0;
@@ -100,7 +120,7 @@ class _AutonomyPageState extends State<AutonomyPage> {
               controller: litrosController,
               labelText: 'Litros Abastecidos',
               hintText: 'Ex: 21.50',
-              onEditingComplete: _calcularMedia,
+              focusNode: litrosFocusNode,
             ),
             const SizedBox(height: 30),
             Text(

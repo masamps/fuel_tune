@@ -69,7 +69,7 @@ class _SavePageState extends State<SavePage> {
                 'KM: ${registro['km_percorrido']} - Litros: ${registro['litros_abastecidos']}',
               ),
               subtitle: Text(
-                'Data: ${_formatarData(registro['data_hora'])}',
+                'Data: ${_formatarData(registro['data_hora'])} - Média: ${registro['media_consumo']}',
               ),
             ),
           );

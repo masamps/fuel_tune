@@ -5,6 +5,7 @@ class InputFieldWidget extends StatelessWidget {
   final String labelText;
   final String hintText;
   final VoidCallback? onEditingComplete;
+  final FocusNode? focusNode;  // Adicionado o parâmetro FocusNode (opcional)
 
   const InputFieldWidget({
     Key? key,
@@ -12,6 +13,7 @@ class InputFieldWidget extends StatelessWidget {
     required this.labelText,
     required this.hintText,
     this.onEditingComplete,
+    this.focusNode,  // Inicialização do parâmetro FocusNode
   }) : super(key: key);
 
   @override
@@ -22,6 +24,7 @@ class InputFieldWidget extends StatelessWidget {
         controller: controller,
         keyboardType: TextInputType.number,
         onEditingComplete: onEditingComplete,
+        focusNode: focusNode,  // Aqui associamos o FocusNode ao campo de texto
         decoration: InputDecoration(
           labelText: labelText,
           hintText: hintText,
@@ -29,8 +32,7 @@ class InputFieldWidget extends StatelessWidget {
           labelStyle: const TextStyle(color: Colors.black),
           filled: true,
           fillColor: Colors.white,
-          contentPadding:
-          const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
+          contentPadding: const EdgeInsets.symmetric(vertical: 15, horizontal: 20),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: const BorderSide(color: Colors.grey, width: 1),
