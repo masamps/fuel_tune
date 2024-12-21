@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:fuel_tune/widgets/apple_button.dart';
 import 'package:fuel_tune/widgets/input_field_widget.dart';
@@ -31,11 +33,18 @@ class _AutonomyPageState extends State<AutonomyPage> {
 
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final double kmPercorridos = double.tryParse(kmController.text) ?? 0.0;
-    final double litrosAbastecidos = double.tryParse(litrosController.text) ?? 0.0;
+    String? listaString = prefs.getString('lista_abastecimentos');
+    List<dynamic> lista = listaString != null ? jsonDecode(listaString) : [];
 
-    await prefs.setDouble('km_percorrido', kmPercorridos);
-    await prefs.setDouble('litros_abastecidos', litrosAbastecidos);
+    Map<String, dynamic> novoRegistro = {
+      'km_percorrido': double.tryParse(kmController.text) ?? 0.0,
+      'litros_abastecidos': double.tryParse(litrosController.text) ?? 0.0,
+      'data_hora': DateTime.now().toIso8601String(),
+    };
+
+    lista.add(novoRegistro);
+
+    await prefs.setString('lista_abastecimentos', jsonEncode(lista));
 
     _exibirMensagemSucesso();
   }
