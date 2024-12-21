@@ -73,7 +73,8 @@ class _SettingsPageState extends State<SettingsPage> {
               padding: const EdgeInsets.only(top: 16.0),
               child: Text(
                 _sizeMessage,
-                style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                style:
+                    const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
               ),
             ),
           ],

@@ -46,35 +46,35 @@ class _SavePageState extends State<SavePage> {
       body: registros.isEmpty
           ? const Center(child: Text('Nenhum registro salvo.'))
           : ListView.builder(
-        itemCount: registros.length,
-        itemBuilder: (context, index) {
-          final registro = registros[index];
-          return Dismissible(
-            key: Key(index.toString()),
-            direction: DismissDirection.endToStart,
-            background: Container(
-              color: Colors.red,
-              alignment: Alignment.centerRight,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              child: const Icon(Icons.delete, color: Colors.white),
+              itemCount: registros.length,
+              itemBuilder: (context, index) {
+                final registro = registros[index];
+                return Dismissible(
+                  key: Key(index.toString()),
+                  direction: DismissDirection.endToStart,
+                  background: Container(
+                    color: Colors.red,
+                    alignment: Alignment.centerRight,
+                    padding: const EdgeInsets.symmetric(horizontal: 20),
+                    child: const Icon(Icons.delete, color: Colors.white),
+                  ),
+                  onDismissed: (direction) {
+                    _deletarRegistro(index);
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Registro deletado')),
+                    );
+                  },
+                  child: ListTile(
+                    title: Text(
+                      'KM: ${registro['km_percorrido']} - Litros: ${registro['litros_abastecidos']}',
+                    ),
+                    subtitle: Text(
+                      'Data: ${_formatarData(registro['data_hora'])} - Média: ${registro['media_consumo']}',
+                    ),
+                  ),
+                );
+              },
             ),
-            onDismissed: (direction) {
-              _deletarRegistro(index);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Registro deletado')),
-              );
-            },
-            child: ListTile(
-              title: Text(
-                'KM: ${registro['km_percorrido']} - Litros: ${registro['litros_abastecidos']}',
-              ),
-              subtitle: Text(
-                'Data: ${_formatarData(registro['data_hora'])} - Média: ${registro['media_consumo']}',
-              ),
-            ),
-          );
-        },
-      ),
     );
   }
 }

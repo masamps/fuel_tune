@@ -1,5 +1,6 @@
 class CalculoCombustivelLitragem {
-  static Map<String, double> calcularProporcao(double litros, String tipoCombustivel) {
+  static Map<String, double> calcularProporcao(
+      double litros, String tipoCombustivel) {
     double percentualAlcool;
 
     switch (tipoCombustivel) {
@@ -53,11 +54,11 @@ class CalculoCombustivelLitragem {
 
 class CalculoCombustivelValor {
   static Map<String, double> calcularProporcao(
-      double valorAbastecimento,
-      double precoGasolina,
-      double precoAlcool,
-      String tipoCombustivel,
-      ) {
+    double valorAbastecimento,
+    double precoGasolina,
+    double precoAlcool,
+    String tipoCombustivel,
+  ) {
     double percentualAlcool;
 
     switch (tipoCombustivel) {

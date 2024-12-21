@@ -14,31 +14,31 @@ class AutonomyPage extends StatefulWidget {
 class _AutonomyPageState extends State<AutonomyPage> {
   final TextEditingController kmController = TextEditingController();
   final TextEditingController litrosController = TextEditingController();
-  final FocusNode litrosFocusNode = FocusNode();  // FocusNode para o campo litros
+  final FocusNode litrosFocusNode = FocusNode();
   double mediaConsumo = 0.0;
 
   @override
   void initState() {
     super.initState();
-    litrosFocusNode.addListener(_onLitrosFocusChange);  // Ouve as mudanças de foco
+    litrosFocusNode.addListener(_onLitrosFocusChange);
   }
 
   @override
   void dispose() {
-    litrosFocusNode.removeListener(_onLitrosFocusChange);  // Remover o ouvinte
+    litrosFocusNode.removeListener(_onLitrosFocusChange);
     super.dispose();
   }
 
   void _onLitrosFocusChange() {
     if (!litrosFocusNode.hasFocus) {
-      // Quando o campo "Litros Abastecidos" perde o foco, calcula a média
       _calcularMedia();
     }
   }
 
   void _calcularMedia() {
     final double kmPercorridos = double.tryParse(kmController.text) ?? 0.0;
-    final double litrosAbastecidos = double.tryParse(litrosController.text) ?? 0.0;
+    final double litrosAbastecidos =
+        double.tryParse(litrosController.text) ?? 0.0;
 
     setState(() {
       mediaConsumo = calcularMedia(kmPercorridos, litrosAbastecidos);
@@ -72,7 +72,8 @@ class _AutonomyPageState extends State<AutonomyPage> {
 
   void _exibirMensagemSucesso() {
     const snackBar = SnackBar(
-      content: Text('Os dados de quilometragem e litros foram salvos com sucesso.'),
+      content:
+          Text('Os dados de quilometragem e litros foram salvos com sucesso.'),
       duration: Duration(seconds: 3),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
@@ -81,7 +82,8 @@ class _AutonomyPageState extends State<AutonomyPage> {
 
   void _exibirMensagemErro() {
     const snackBar = SnackBar(
-      content: Text('Por favor, preencha ambos os campos de quilometragem e litros.'),
+      content: Text(
+          'Por favor, preencha ambos os campos de quilometragem e litros.'),
       backgroundColor: Colors.red,
       duration: Duration(seconds: 3),
     );

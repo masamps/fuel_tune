@@ -28,7 +28,7 @@ class _MixturePageState extends State<MixturePage> {
                 });
               },
               style: const ToggleStyle(
-                indicatorColor  : Colors.blue,
+                indicatorColor: Colors.blue,
                 borderColor: Colors.blue,
               ),
               iconBuilder: (value) => value
