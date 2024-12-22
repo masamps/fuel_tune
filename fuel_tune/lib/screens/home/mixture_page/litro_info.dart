@@ -3,6 +3,8 @@ import 'package:fuel_tune/models/tipo_combustivel.dart';
 import 'package:fuel_tune/services/calculo_combustivel.dart';
 
 class LitroInfo extends StatefulWidget {
+  const LitroInfo({super.key});
+
   @override
   _LitroInfoState createState() => _LitroInfoState();
 }

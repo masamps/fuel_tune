@@ -7,6 +7,8 @@ import 'package:fuel_tune/services/calculo_autonomia.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class AutonomyPage extends StatefulWidget {
+  const AutonomyPage({super.key});
+
   @override
   _AutonomyPageState createState() => _AutonomyPageState();
 }

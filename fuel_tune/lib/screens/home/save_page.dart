@@ -4,6 +4,8 @@ import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SavePage extends StatefulWidget {
+  const SavePage({super.key});
+
   @override
   _SavePageState createState() => _SavePageState();
 }

@@ -4,6 +4,8 @@ import 'mixture_page/litro_info.dart';
 import 'mixture_page/valor_info.dart';
 
 class MixturePage extends StatefulWidget {
+  const MixturePage({super.key});
+
   @override
   _MixturePageState createState() => _MixturePageState();
 }
@@ -44,7 +46,7 @@ class _MixturePageState extends State<MixturePage> {
             ),
             const SizedBox(height: 20),
             Expanded(
-              child: isLitro ? LitroInfo() : ValorInfo(),
+              child: isLitro ? const LitroInfo() : const ValorInfo(),
             ),
           ],
         ),

@@ -8,13 +8,13 @@ class InputFieldWidget extends StatelessWidget {
   final FocusNode? focusNode; // Adicionado o parâmetro FocusNode (opcional)
 
   const InputFieldWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.labelText,
     required this.hintText,
     this.onEditingComplete,
     this.focusNode, // Inicialização do parâmetro FocusNode
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

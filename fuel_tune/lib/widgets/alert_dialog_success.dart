@@ -5,10 +5,10 @@ class AlertDialogSuccess extends StatelessWidget {
   final VoidCallback onOkPressed;
 
   const AlertDialogSuccess({
-    Key? key,
+    super.key,
     required this.message,
     required this.onOkPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

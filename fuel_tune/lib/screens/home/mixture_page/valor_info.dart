@@ -4,6 +4,8 @@ import 'package:fuel_tune/services/calculo_combustivel.dart';
 import 'package:fuel_tune/widgets/input_field_widget.dart';
 
 class ValorInfo extends StatefulWidget {
+  const ValorInfo({super.key});
+
   @override
   State<ValorInfo> createState() => _ValorInfoState();
 }

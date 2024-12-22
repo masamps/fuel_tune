@@ -38,6 +38,12 @@ dependencies:
   animated_toggle_switch: ^0.8.3
   shared_preferences: ^2.3.3
   intl: ^0.20.1
+  flutter_launcher_icons: ^0.14.2
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "lib/assets/logo-fuel.jpeg"
 
 dev_dependencies:
   flutter_test:
