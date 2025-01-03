@@ -1,7 +1,6 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
+import 'package:fuel_tune/services/database_helper.dart';
 import 'package:intl/intl.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class SavePage extends StatefulWidget {
   const SavePage({super.key});
@@ -19,24 +18,29 @@ class _SavePageState extends State<SavePage> {
     _carregarDados();
   }
 
+  /// Carrega os dados do banco de dados SQLite
   Future<void> _carregarDados() async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? listaString = prefs.getString('lista_abastecimentos');
-    if (listaString != null) {
-      List<dynamic> lista = jsonDecode(listaString);
+    try {
+      List<Map<String, dynamic>> lista = await DatabaseHelper.instance.queryAll('abastecimentos');
       setState(() {
-        registros = lista.cast<Map<String, dynamic>>();
+        registros = lista;
       });
+    } catch (e) {
+      print('Erro ao carregar dados: $e');
     }
   }
 
-  Future<void> _deletarRegistro(int index) async {
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-    registros.removeAt(index);
-    await prefs.setString('lista_abastecimentos', jsonEncode(registros));
-    setState(() {});
+  /// Deleta um registro do banco de dados com base no ID
+  Future<void> _deletarRegistro(int id) async {
+    try {
+      await DatabaseHelper.instance.delete('abastecimentos', 'id = ?', [id]);
+      await _carregarDados();
+    } catch (e) {
+      print('Erro ao deletar registro: $e');
+    }
   }
 
+  /// Formata a data para exibição no formato dd/MM/yyyy HH:mm
   String _formatarData(String dataHora) {
     DateTime data = DateTime.parse(dataHora);
     return DateFormat('dd/MM/yyyy HH:mm').format(data);
@@ -48,35 +52,36 @@ class _SavePageState extends State<SavePage> {
       body: registros.isEmpty
           ? const Center(child: Text('Nenhum registro salvo.'))
           : ListView.builder(
-              itemCount: registros.length,
-              itemBuilder: (context, index) {
-                final registro = registros[index];
-                return Dismissible(
-                  key: Key(index.toString()),
-                  direction: DismissDirection.endToStart,
-                  background: Container(
-                    color: Colors.red,
-                    alignment: Alignment.centerRight,
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: const Icon(Icons.delete, color: Colors.white),
-                  ),
-                  onDismissed: (direction) {
-                    _deletarRegistro(index);
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Registro deletado')),
-                    );
-                  },
-                  child: ListTile(
-                    title: Text(
-                      'KM: ${registro['km_percorrido']} - Litros: ${registro['litros_abastecidos']}',
-                    ),
-                    subtitle: Text(
-                      'Data: ${_formatarData(registro['data_hora'])} - Média: ${registro['media_consumo']}',
-                    ),
-                  ),
-                );
-              },
+        itemCount: registros.length,
+        itemBuilder: (context, index) {
+          final registro = registros[index];
+          return Dismissible(
+            key: Key(registro['id'].toString()), // Usar o ID como chave
+            direction: DismissDirection.endToStart,
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              child: const Icon(Icons.delete, color: Colors.white),
             ),
+            onDismissed: (direction) {
+              final int id = registro['id']; // Obter o ID do registro
+              _deletarRegistro(id); // Deletar com base no ID
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Registro deletado')),
+              );
+            },
+            child: ListTile(
+              title: Text(
+                'KM: ${registro['km_percorrido']} - Litros: ${registro['litros']}',
+              ),
+              subtitle: Text(
+                'Data: ${_formatarData(registro['dt_abastecimento'])} - Média: ${registro['media_consumo'] ?? 'N/A'}',
+              ),
+            ),
+          );
+        },
+      ),
     );
   }
 }

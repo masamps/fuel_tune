@@ -36,9 +36,10 @@ dependencies:
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
   animated_toggle_switch: ^0.8.3
-  shared_preferences: ^2.3.3
   intl: ^0.20.1
   flutter_launcher_icons: ^0.14.2
+  sqflite: ^2.4.1
+  path: ^1.9.0
 
 flutter_icons:
   android: true

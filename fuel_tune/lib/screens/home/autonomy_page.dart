@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:fuel_tune/services/database_helper.dart';
 import 'package:fuel_tune/widgets/apple_button.dart';
 import 'package:fuel_tune/widgets/input_field_widget.dart';
 import 'package:fuel_tune/services/calculo_autonomia.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 class AutonomyPage extends StatefulWidget {
   const AutonomyPage({super.key});
@@ -53,24 +53,24 @@ class _AutonomyPageState extends State<AutonomyPage> {
       return;
     }
 
-    final SharedPreferences prefs = await SharedPreferences.getInstance();
-
-    String? listaString = prefs.getString('lista_abastecimentos');
-    List<dynamic> lista = listaString != null ? jsonDecode(listaString) : [];
+    double kmPercorrido = double.tryParse(kmController.text) ?? 0.0;
+    double litrosAbastecidos = double.tryParse(litrosController.text) ?? 0.0;
 
     Map<String, dynamic> novoRegistro = {
-      'km_percorrido': double.tryParse(kmController.text) ?? 0.0,
-      'litros_abastecidos': double.tryParse(litrosController.text) ?? 0.0,
+      'km_percorrido': kmPercorrido,
+      'litros': litrosAbastecidos,
       'media_consumo': mediaConsumo,
-      'data_hora': DateTime.now().toIso8601String(),
+      'dt_abastecimento': DateTime.now().toIso8601String(),
     };
 
-    lista.add(novoRegistro);
-
-    await prefs.setString('lista_abastecimentos', jsonEncode(lista));
-
-    _exibirMensagemSucesso();
+    try {
+      await DatabaseHelper.instance.insert('abastecimentos', novoRegistro);
+      _exibirMensagemSucesso();
+    } catch (e) {
+      print('Erro ao salvar os dados: $e');
+    }
   }
+
 
   void _exibirMensagemSucesso() {
     const snackBar = SnackBar(
