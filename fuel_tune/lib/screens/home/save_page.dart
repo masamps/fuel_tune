@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fuel_tune/services/database_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'dart:convert';
 import 'package:intl/intl.dart';
 
 class SavePage extends StatefulWidget {
@@ -18,26 +19,28 @@ class _SavePageState extends State<SavePage> {
     _carregarDados();
   }
 
-  /// Carrega os dados do banco de dados SQLite
   Future<void> _carregarDados() async {
-    try {
-      List<Map<String, dynamic>> lista = await DatabaseHelper.instance.queryAll('abastecimentos');
+    final prefs = await SharedPreferences.getInstance();
+    final String? registrosJson = prefs.getString('abastecimentos');
+    if (registrosJson != null) {
       setState(() {
-        registros = lista;
+        registros = List<Map<String, dynamic>>.from(json.decode(registrosJson));
       });
-    } catch (e) {
-      print('Erro ao carregar dados: $e');
     }
   }
 
-  /// Deleta um registro do banco de dados com base no ID
-  Future<void> _deletarRegistro(int id) async {
-    try {
-      await DatabaseHelper.instance.delete('abastecimentos', 'id = ?', [id]);
-      await _carregarDados();
-    } catch (e) {
-      print('Erro ao deletar registro: $e');
-    }
+  /// Salva os dados no SharedPreferences
+  Future<void> _salvarDados() async {
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString('abastecimentos', json.encode(registros));
+  }
+
+  /// Deleta um registro com base no índice
+  Future<void> _deletarRegistro(int index) async {
+    setState(() {
+      registros.removeAt(index);
+    });
+    await _salvarDados();
   }
 
   /// Formata a data para exibição no formato dd/MM/yyyy HH:mm
@@ -56,7 +59,7 @@ class _SavePageState extends State<SavePage> {
         itemBuilder: (context, index) {
           final registro = registros[index];
           return Dismissible(
-            key: Key(registro['id'].toString()), // Usar o ID como chave
+            key: Key(index.toString()),
             direction: DismissDirection.endToStart,
             background: Container(
               color: Colors.red,
@@ -65,8 +68,7 @@ class _SavePageState extends State<SavePage> {
               child: const Icon(Icons.delete, color: Colors.white),
             ),
             onDismissed: (direction) {
-              final int id = registro['id']; // Obter o ID do registro
-              _deletarRegistro(id); // Deletar com base no ID
+              _deletarRegistro(index);
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Registro deletado')),
               );

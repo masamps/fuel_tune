@@ -4,7 +4,7 @@ import 'screens/home.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
-  await DatabaseHelper.instance.database;
+  // await DatabaseHelper.instance.database;
   runApp(const MyApp());
 }
 

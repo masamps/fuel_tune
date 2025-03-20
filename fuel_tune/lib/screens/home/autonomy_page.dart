@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:fuel_tune/services/database_helper.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:fuel_tune/widgets/apple_button.dart';
 import 'package:fuel_tune/widgets/input_field_widget.dart';
 import 'package:fuel_tune/services/calculo_autonomia.dart';
@@ -64,18 +64,27 @@ class _AutonomyPageState extends State<AutonomyPage> {
     };
 
     try {
-      await DatabaseHelper.instance.insert('abastecimentos', novoRegistro);
+      final prefs = await SharedPreferences.getInstance();
+      final String? registrosJson = prefs.getString('abastecimentos');
+
+      List<Map<String, dynamic>> registros = registrosJson != null
+          ? List<Map<String, dynamic>>.from(json.decode(registrosJson))
+          : [];
+
+      registros.add(novoRegistro);
+
+      await prefs.setString('abastecimentos', json.encode(registros));
+
       _exibirMensagemSucesso();
     } catch (e) {
       print('Erro ao salvar os dados: $e');
     }
   }
 
-
   void _exibirMensagemSucesso() {
     const snackBar = SnackBar(
       content:
-          Text('Os dados de quilometragem e litros foram salvos com sucesso.'),
+      Text('Os dados de quilometragem e litros foram salvos com sucesso.'),
       duration: Duration(seconds: 3),
     );
     ScaffoldMessenger.of(context).showSnackBar(snackBar);
