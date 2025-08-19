@@ -16,6 +16,7 @@ class AutonomyPage extends StatefulWidget {
 class _AutonomyPageState extends State<AutonomyPage> {
   final TextEditingController kmController = TextEditingController();
   final TextEditingController litrosController = TextEditingController();
+  final TextEditingController observacaoController = TextEditingController();
   final FocusNode litrosFocusNode = FocusNode();
   double mediaConsumo = 0.0;
 
@@ -55,11 +56,13 @@ class _AutonomyPageState extends State<AutonomyPage> {
 
     double kmPercorrido = double.tryParse(kmController.text) ?? 0.0;
     double litrosAbastecidos = double.tryParse(litrosController.text) ?? 0.0;
+    String observacao = observacaoController.text;
 
     Map<String, dynamic> novoRegistro = {
       'km_percorrido': kmPercorrido,
       'litros': litrosAbastecidos,
       'media_consumo': mediaConsumo,
+      'observacao': observacao,
       'dt_abastecimento': DateTime.now().toIso8601String(),
     };
 
@@ -105,6 +108,7 @@ class _AutonomyPageState extends State<AutonomyPage> {
     setState(() {
       kmController.clear();
       litrosController.clear();
+      observacaoController.clear();
       mediaConsumo = 0.0;
     });
   }
@@ -134,6 +138,12 @@ class _AutonomyPageState extends State<AutonomyPage> {
               labelText: 'Litros Abastecidos',
               hintText: 'Ex: 21.50',
               focusNode: litrosFocusNode,
+            ),
+            const SizedBox(height: 30),
+            InputFieldWidget(
+              controller: observacaoController,
+              labelText: 'Observação (opcional)',
+              hintText: 'Abastecido dia 01/01/2023',
             ),
             const SizedBox(height: 30),
             Text(

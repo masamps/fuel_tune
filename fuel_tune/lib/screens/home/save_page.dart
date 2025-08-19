@@ -78,7 +78,7 @@ class _SavePageState extends State<SavePage> {
                 'KM: ${registro['km_percorrido']} - Litros: ${registro['litros']}',
               ),
               subtitle: Text(
-                'Data: ${_formatarData(registro['dt_abastecimento'])} - Média: ${registro['media_consumo'] ?? 'N/A'}',
+                'Obs: ${registro['observacao']} - Média: ${registro['media_consumo'] ?? 'N/A'}',
               ),
             ),
           );

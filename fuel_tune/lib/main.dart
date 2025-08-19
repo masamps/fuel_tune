@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:fuel_tune/services/database_helper.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'screens/home.dart';
 
 void main() async{
   WidgetsFlutterBinding.ensureInitialized();
   // await DatabaseHelper.instance.database;
+  await MobileAds.instance.initialize();
   runApp(const MyApp());
 }
 
