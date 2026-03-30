@@ -1,5 +1,5 @@
 name: fuel_tune
-description: "A new Flutter project."
+description: "Aplicativo offline para calcular mistura de combustivel e registrar abastecimentos."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -30,23 +30,23 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  animated_toggle_switch: ^0.8.3
   intl: ^0.20.1
   flutter_launcher_icons: ^0.14.2
-  sqflite: ^2.4.1
-  path: ^1.9.0
   shared_preferences: ^2.5.1
-  google_mobile_ads: ^6.0.0
 
-flutter_icons:
+flutter_launcher_icons:
   android: true
   ios: true
   image_path: "lib/assets/logo-fuel.jpeg"
+  adaptive_icon_background: "#F5F8FC"
+  adaptive_icon_foreground: "lib/assets/logo-fuel.jpeg"
 
 dev_dependencies:
   flutter_test:

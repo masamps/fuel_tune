@@ -1,7 +1,7 @@
-double calcularMedia(double kmPercorridos, double litrosAbastecidos) {
-  if (litrosAbastecidos > 0) {
-    return kmPercorridos / litrosAbastecidos;
-  } else {
+double calculateAverageConsumption(double distanceKm, double litersFilled) {
+  if (litersFilled <= 0) {
     return 0.0;
   }
+
+  return distanceKm / litersFilled;
 }

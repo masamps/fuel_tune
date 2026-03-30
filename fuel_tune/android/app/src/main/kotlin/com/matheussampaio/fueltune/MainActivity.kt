@@ -1,4 +1,4 @@
-package com.example.fuel_tune
+package com.matheussampaio.fueltune
 
 import io.flutter.embedding.android.FlutterActivity
 

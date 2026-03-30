@@ -1,117 +1,57 @@
-class CalculoCombustivelLitragem {
-  static Map<String, double> calcularProporcao(
-      double litros, String tipoCombustivel) {
-    double percentualAlcool;
+class FuelMixResult {
+  const FuelMixResult({
+    required this.ethanolLiters,
+    required this.gasolineLiters,
+    this.totalLiters,
+  });
 
-    switch (tipoCombustivel) {
-      case 'E5':
-        percentualAlcool = 0.05;
-        break;
-      case 'E10':
-        percentualAlcool = 0.10;
-        break;
-      case 'E20':
-        percentualAlcool = 0.20;
-        break;
-      case 'E25':
-        percentualAlcool = 0.25;
-        break;
-      case 'E70':
-        percentualAlcool = 0.70;
-        break;
-      case 'E75':
-        percentualAlcool = 0.75;
-        break;
-      case 'E85':
-        percentualAlcool = 0.85;
-        break;
-      case 'E95':
-        percentualAlcool = 0.95;
-        break;
-      case 'E100':
-        percentualAlcool = 1.0;
-        break;
-      case 'Gasolina':
-        percentualAlcool = 0.0;
-        break;
-      case 'Alcool':
-        percentualAlcool = 1.0;
-        break;
-      default:
-        percentualAlcool = 0.0;
-        break;
-    }
-
-    double quantidadeAlcool = litros * percentualAlcool;
-    double quantidadeGasolina = litros - quantidadeAlcool;
-
-    return {
-      'alcool': quantidadeAlcool,
-      'gasolina': quantidadeGasolina,
-    };
-  }
+  final double ethanolLiters;
+  final double gasolineLiters;
+  final double? totalLiters;
 }
 
-class CalculoCombustivelValor {
-  static Map<String, double> calcularProporcao(
-    double valorAbastecimento,
-    double precoGasolina,
-    double precoAlcool,
-    String tipoCombustivel,
-  ) {
-    double percentualAlcool;
-
-    switch (tipoCombustivel) {
-      case 'E5':
-        percentualAlcool = 0.05;
-        break;
-      case 'E10':
-        percentualAlcool = 0.10;
-        break;
-      case 'E20':
-        percentualAlcool = 0.20;
-        break;
-      case 'E25':
-        percentualAlcool = 0.25;
-        break;
-      case 'E70':
-        percentualAlcool = 0.70;
-        break;
-      case 'E75':
-        percentualAlcool = 0.75;
-        break;
-      case 'E85':
-        percentualAlcool = 0.85;
-        break;
-      case 'E95':
-        percentualAlcool = 0.95;
-        break;
-      case 'E100':
-        percentualAlcool = 1.0;
-        break;
-      case 'Gasolina':
-        percentualAlcool = 0.0;
-        break;
-      case 'Alcool':
-        percentualAlcool = 1.0;
-        break;
-      default:
-        percentualAlcool = 0.0;
-        break;
+class FuelMixCalculator {
+  static FuelMixResult calculateByLiters({
+    required double totalLiters,
+    required double ethanolFraction,
+  }) {
+    if (totalLiters <= 0) {
+      throw ArgumentError('Informe quantos litros você vai abastecer.');
     }
 
-    double proporcaoGasolina = 1 - percentualAlcool;
-    double proporcaoAlcool = percentualAlcool;
+    final ethanolLiters = totalLiters * ethanolFraction;
+    final gasolineLiters = totalLiters - ethanolLiters;
 
-    double valorGasolina = valorAbastecimento * proporcaoGasolina;
-    double valorAlcool = valorAbastecimento * proporcaoAlcool;
+    return FuelMixResult(
+      ethanolLiters: ethanolLiters,
+      gasolineLiters: gasolineLiters,
+      totalLiters: totalLiters,
+    );
+  }
 
-    double litrosGasolina = valorGasolina / precoGasolina;
-    double litrosAlcool = valorAlcool / precoAlcool;
+  static FuelMixResult calculateByValue({
+    required double totalAmount,
+    required double ethanolPrice,
+    required double gasolinePrice,
+    required double ethanolFraction,
+  }) {
+    if (totalAmount <= 0) {
+      throw ArgumentError('Informe o valor total do abastecimento.');
+    }
 
-    return {
-      'gasolina': litrosGasolina,
-      'alcool': litrosAlcool,
-    };
+    if (ethanolPrice <= 0 || gasolinePrice <= 0) {
+      throw ArgumentError('Informe os preços do etanol e da gasolina.');
+    }
+
+    final ethanolAmount = totalAmount * ethanolFraction;
+    final gasolineAmount = totalAmount - ethanolAmount;
+    final ethanolLiters = ethanolAmount / ethanolPrice;
+    final gasolineLiters = gasolineAmount / gasolinePrice;
+
+    return FuelMixResult(
+      ethanolLiters: ethanolLiters,
+      gasolineLiters: gasolineLiters,
+      totalLiters: ethanolLiters + gasolineLiters,
+    );
   }
 }

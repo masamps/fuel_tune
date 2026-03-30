@@ -1,30 +1,64 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-
-import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:fuel_tune/l10n/language_controller.dart';
 import 'package:fuel_tune/main.dart';
+import 'package:fuel_tune/repositories/local_preferences_repository.dart';
+import 'package:fuel_tune/theme/theme_controller.dart';
+import 'package:flutter/cupertino.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  testWidgets('opens on the mixture flow and shows the main navigation', (
+    WidgetTester tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({});
+    final preferencesRepository = LocalPreferencesRepository();
+    final themeController = ThemeController(preferencesRepository);
+    final languageController = LanguageController(preferencesRepository);
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    await themeController.load();
+    await languageController.load();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    await tester.pumpWidget(
+      MyApp(
+        themeController: themeController,
+        languageController: languageController,
+      ),
+    );
+    await tester.pumpAndSettle();
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    expect(find.text('Mistura desejada'), findsOneWidget);
+    expect(find.byIcon(CupertinoIcons.speedometer), findsOneWidget);
+    expect(find.byIcon(CupertinoIcons.clock), findsOneWidget);
+    expect(find.byIcon(CupertinoIcons.settings), findsOneWidget);
+  });
+
+  testWidgets('shows English copy and the Pro tab when premium is enabled', (
+    WidgetTester tester,
+  ) async {
+    SharedPreferences.setMockInitialValues({
+      'language_code': 'en',
+      'pro_unlocked': true,
+    });
+    final preferencesRepository = LocalPreferencesRepository();
+    final themeController = ThemeController(preferencesRepository);
+    final languageController = LanguageController(preferencesRepository);
+
+    await themeController.load();
+    await languageController.load();
+
+    await tester.pumpWidget(
+      MyApp(
+        themeController: themeController,
+        languageController: languageController,
+      ),
+    );
+    await tester.pumpAndSettle();
+
+    expect(find.text('Target blend'), findsOneWidget);
+    expect(find.byIcon(CupertinoIcons.speedometer), findsOneWidget);
+    expect(find.byIcon(CupertinoIcons.clock), findsOneWidget);
+    expect(find.byIcon(CupertinoIcons.star), findsOneWidget);
+    expect(find.byIcon(CupertinoIcons.settings), findsOneWidget);
   });
 }
