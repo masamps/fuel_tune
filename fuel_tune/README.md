@@ -1,16 +1,16 @@
-# fuel_tune
+# Fuel Tune App
 
-A new Flutter project.
+This folder contains the Flutter application for Fuel Tune.
 
-## Getting Started
+For the public project overview, positioning, and repository presentation, start with the root README:
 
-This project is a starting point for a Flutter application.
+- [`../README.md`](../README.md)
 
-A few resources to get you started if this is your first Flutter project:
+## Local Development
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+```bash
+flutter pub get
+flutter analyze
+flutter test
+flutter run
+```
